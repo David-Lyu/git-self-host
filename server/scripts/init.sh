@@ -6,7 +6,7 @@ if [ DOCKER_ENV != "DOCKER" ]; then
     # Check if it is a linux distro, and if it is debian
     if [ -f /etc/os-release ]; then
         OS=$(cat /etc/os-release | grep "^(NAME)=")
-        if [ $OS != "Debian GNU/Linux" ]; then
+        if [ ! $OS = "Debian GNU/Linux" ]; then
             echo "We do not support the linux distro";
             exit 1;
         fi
