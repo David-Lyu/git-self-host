@@ -13,13 +13,13 @@ func InitRouter() {
 	router := r.Group("/v1")
 	{
 		// users
-		user_router := router.Group("/user")
+		userRouter := router.Group("/user")
 		{
-			user_router.POST("/", controllers.InsertUser)
-			user_router.GET("/", controllers.GetUsers)
-			user_router.GET("/:id", controllers.GetUser)
-			user_router.PATCH("/", controllers.UpdateUser)
-			user_router.DELETE("/", controllers.DeleteUser)
+			userRouter.POST("/", controllers.InsertUser)
+			userRouter.GET("/", controllers.GetUsers)
+			userRouter.GET("/:id", controllers.GetUser)
+			userRouter.PATCH("/:id", controllers.UpdateUser)
+			userRouter.DELETE("/:id", controllers.DeleteUser)
 		}
 	}
 

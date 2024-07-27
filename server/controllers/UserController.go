@@ -29,10 +29,12 @@ func InsertUser(c *gin.Context) {
 
 	if err != nil {
 		log.Fatalln(err.Error())
+		c.JSON(500, gin.H{"error": err.Error()})
 	}
 	_, err = statement.Exec(id, user.Email, user.Username, true)
 	if err != nil {
 		log.Fatalln(err.Error())
+		c.JSON(500, gin.H{"error": err.Error()})
 	}
 
 	c.JSON(200, gin.H{"message": "User inserted!"})
@@ -45,6 +47,7 @@ func GetUsers(c *gin.Context) {
 	row, err := sqliteDatabase.Query("SELECT * FROM User")
 	if err != nil {
 		log.Fatal(err)
+		c.JSON(500, gin.H{"error": err.Error()})
 	}
 	defer row.Close()
 
@@ -55,6 +58,7 @@ func GetUsers(c *gin.Context) {
 		err := row.Scan(&user.Id, &user.Email, &user.Username, &user.IsActive)
 		if err != nil {
 			log.Fatal(err)
+			c.JSON(500, gin.H{"error": err.Error()})
 		}
 		users = append(users, user)
 	}
@@ -71,6 +75,7 @@ func GetUser(c *gin.Context) {
 	row, err := sqliteDatabase.Query("SELECT * FROM User where id = ? ", id)
 	if err != nil {
 		log.Fatal(err)
+		c.JSON(500, gin.H{"error": err.Error()})
 	}
 	defer row.Close()
 
@@ -81,6 +86,7 @@ func GetUser(c *gin.Context) {
 		err := row.Scan(&user.Id, &user.Email, &user.Username, &user.IsActive)
 		if err != nil {
 			log.Fatal(err)
+			c.JSON(500, gin.H{"error": err.Error()})
 		}
 		users = append(users, user)
 	}
@@ -89,9 +95,13 @@ func GetUser(c *gin.Context) {
 }
 
 func UpdateUser(c *gin.Context) {
+	/* TODO Implement the update functonanlity */
+
 	c.JSON(200, gin.H{"message": "update user"})
 }
 
 func DeleteUser(c *gin.Context) {
+	/* TODO Implement the delete functonanlity */
+
 	c.JSON(200, gin.H{"message": "delete user"})
 }
