@@ -28,7 +28,5 @@ ARG DOCKER_ENV=DOCKER
 ENV DOCKER_ENV="$DOCKER_ENV"
 ENV MAIN_PATH="$MAIN_PATH"
 
-ENTRYPOINT [ "./init.sh", "./main" ]
+ENTRYPOINT [ "./init.sh" ]
 # EXPOSE 8080
-
-CMD ["./main"]
