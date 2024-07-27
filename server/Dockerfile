@@ -21,6 +21,8 @@ COPY ./scripts/init.sh ./init.sh
 COPY ./models/database/sqlite-database.db /app/models/database/sqlite-database.db
 COPY --from=go_build /app/server/main .
 
+ARG DOCKER_ENV=DOCKER
+
 RUN ./init.sh
 # EXPOSE 8080
 
