@@ -2,33 +2,20 @@ services:
   git:
     build:
       context: ./server/
+    profiles:
+      - production
     ports:
       - "8080:8080"
   # Prod service above; Test service below
   git-test:
+    image: cosmtrek/air
+    # working_dir value has to be the same of mapped volume
+    working_dir: /app
     profiles:
       - dev
-    build:
-      context: ./server/
-      cache_from:
-        - golang:latest-alpine
-      dockerfile_inline: |
-        FROM golang:latest-alpine
-        WORKDIR /app
-        COPY . .
-
-        CMD ["go run main.go"]
-      ssh: ["default"]
     ports:
-      - "9999:8080"
-    develop:
-      watch:
-        - action: sync
-          path: ./server
-          ignore:
-            - go.mod
-            - go.sum
-        - action: sync+restart
-          path: ./server/go.mod
+      - "8080:8080"
+    volumes:
+      - ./server/:/app
 
   # front-end:
