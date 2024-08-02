@@ -19,7 +19,7 @@ RUN apk add bash
 # # Need to find the file path of db
 
 COPY ./scripts/init.sh ./init.sh
-COPY ./models/database/sqlite-database.db /app/models/database/sqlite-database.db
+COPY ./database/sqlite-database.db /app/database/sqlite-database.db
 COPY --from=go_build /app/server/main .
 
 #ARG is build time env (image)
