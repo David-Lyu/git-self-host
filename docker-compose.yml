@@ -1,0 +1,21 @@
+services:
+  git:
+    build:
+      context: ./server/
+    profiles:
+      - production
+    ports:
+      - "8080:8080"
+  # Prod service above; Test service below
+  git-test:
+    image: cosmtrek/air
+    # working_dir value has to be the same of mapped volume
+    working_dir: /app
+    profiles:
+      - dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./server/:/app
+
+  # front-end:

@@ -1,8 +1,0 @@
-FROM alpine:latest
-WORKDIR /home
-COPY ./init.sh .
-RUN apk add apt
-RUN apk add bash
-
-# CMD ["./init.sh"]
-ENTRYPOINT ["/bin/bash", "./init.sh"]

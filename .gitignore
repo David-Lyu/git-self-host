@@ -20,3 +20,8 @@
 # Go workspace file
 go.work
 go.work.sum
+
+sqlite-database.db
+
+# Docker air
+/server/tmp/
