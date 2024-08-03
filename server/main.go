@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	// const db = database.InitializeSqlLite()
 	database.InitializeSqlLite()
 	router.InitRouter()
 }
