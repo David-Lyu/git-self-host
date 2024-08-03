@@ -7,7 +7,11 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func sqliteDriver() {
+/*
+
+ */
+
+func SqliteDriver() {
 
 	// os.Remove("./database/sqlite-database.db")
 	// log.Println("Creating sqlite-database.db...")
@@ -18,8 +22,8 @@ func sqliteDriver() {
 	// file.Close()
 	// log.Println("sqlite-database.db created")
 
-	sqliteDatabase, _ := sql.Open("sqlite3", "./database/sqlite-database.db")
-	defer sqliteDatabase.Close()
+	sqliteDatabase, _ := sql.Open("sqlite3", "./database/sqlite/sqlite-database.db")
+	// defer sqliteDatabase.Close()
 	createTable(sqliteDatabase)
 }
 

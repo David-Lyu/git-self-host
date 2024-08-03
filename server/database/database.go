@@ -1,6 +1,7 @@
 package database
 
 import (
+	"database/sql"
 	"log"
 	"os"
 
@@ -17,7 +18,7 @@ const (
 	MONGODB    DBType = "MONGODB"
 )
 
-func InitializeSqlLite() {
+func GetDatabase() sql.DB {
 	log.Println(os.Getenv("DB_TYPE"))
 
 	var db = nil
@@ -28,8 +29,11 @@ func InitializeSqlLite() {
 	case string(POSTGRESQL):
 		log.Print("We do not support this yet...\n using sqlite")
 	case string(SQLITE):
+		db
 	default:
 		break
 
 	}
+
+	return sqliteDriver
 }

@@ -9,6 +9,6 @@ import (
 
 func main() {
 	// const db = database.InitializeSqlLite()
-	database.InitializeSqlLite()
+	database.GetDatabase()
 	router.InitRouter()
 }
