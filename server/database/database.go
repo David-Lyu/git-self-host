@@ -1,6 +1,7 @@
 package database
 
 import (
+	sqliteDriver "app/database/sqlite"
 	"database/sql"
 	"log"
 	"os"
@@ -18,22 +19,35 @@ const (
 	MONGODB    DBType = "MONGODB"
 )
 
-func GetDatabase() sql.DB {
-	log.Println(os.Getenv("DB_TYPE"))
+type Database struct {
+	Db       *sql.DB
+	InsertDB func(string, *sql.DB) (*sql.Stmt, error)
+}
 
-	var db = nil
+var DB *Database
 
-	switch os.Getenv("DB_TYPE") {
-	case string(MONGODB):
-	case string(MYSQL):
-	case string(POSTGRESQL):
-		log.Print("We do not support this yet...\n using sqlite")
-	case string(SQLITE):
-		db
-	default:
-		break
+func InitDatabase() {
+
+	if DB == nil {
+		log.Println("Runs")
+
+		switch os.Getenv("DB_TYPE") {
+		case string(MONGODB):
+			fallthrough
+		case string(MYSQL):
+			fallthrough
+		case string(POSTGRESQL):
+			log.Print("We do not support this yet...\n Using sqlite")
+			fallthrough
+		case string(SQLITE):
+			fallthrough
+		default:
+			DB = &Database{
+				Db:       sqliteDriver.SqliteDriver(),
+				InsertDB: sqliteDriver.InsertTable,
+			}
+			break
+		}
 
 	}
-
-	return sqliteDriver
 }

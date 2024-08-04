@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 
+	"app/database"
 	"app/models"
 
 	"github.com/gin-gonic/gin"
@@ -14,8 +15,9 @@ import (
 func InsertUser(c *gin.Context) {
 	id := uuid.New()
 
-	sqliteDatabase, _ := sql.Open("sqlite3", "./database/sqlite-database.db")
-	defer sqliteDatabase.Close()
+	// sqliteDatabase, _ := sql.Open("sqlite3", "./database/sqlite-database.db")
+	// database.DB.db.Open("")
+	// defer sqliteDatabase.Close()
 
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -23,15 +25,17 @@ func InsertUser(c *gin.Context) {
 		return
 	}
 
-	/* TODO  Password Hashing */
-	insertUserSQL := `INSERT INTO User(id, email, username, password, isActive) VALUES (?, ?, ?, ?, ?)`
-	statement, err := sqliteDatabase.Prepare(insertUserSQL)
+	// /* TODO  Password Hashing */
+	// insertUserSQL := `INSERT INTO User(id, email, username, password, isActive) VALUES (?, ?, ?, ?, ?)`
+	// statement, err := sqliteDatabase.Prepare(insertUserSQL)
+	log.Print(database.DB)
+	statement, err := database.DB.InsertDB("User", database.DB.Db)
 
 	if err != nil {
 		log.Fatalln(err.Error())
 		c.JSON(500, gin.H{"error": err.Error()})
 	}
-	_, err = statement.Exec(id, user.Email, user.Username, true)
+	_, err = statement.Exec(id, user.Email, user.Username, user.Password, true)
 	if err != nil {
 		log.Fatalln(err.Error())
 		c.JSON(500, gin.H{"error": err.Error()})
@@ -41,7 +45,7 @@ func InsertUser(c *gin.Context) {
 }
 
 func GetUsers(c *gin.Context) {
-	sqliteDatabase, _ := sql.Open("sqlite3", "./database/sqlite-database.db")
+	sqliteDatabase, _ := sql.Open("sqlite3", "./database/sqlite/sqlite-database.db")
 	defer sqliteDatabase.Close()
 
 	row, err := sqliteDatabase.Query("SELECT * FROM User")
@@ -55,7 +59,7 @@ func GetUsers(c *gin.Context) {
 
 	for row.Next() {
 		user := new(models.User)
-		err := row.Scan(&user.Id, &user.Email, &user.Username, &user.IsActive)
+		err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.IsActive)
 		if err != nil {
 			log.Fatal(err)
 			c.JSON(500, gin.H{"error": err.Error()})
@@ -69,7 +73,7 @@ func GetUsers(c *gin.Context) {
 func GetUser(c *gin.Context) {
 	id := c.Param("id")
 
-	sqliteDatabase, _ := sql.Open("sqlite3", "./database/sqlite-database.db")
+	sqliteDatabase, _ := sql.Open("sqlite3", "./database/sqlite/sqlite-database.db")
 	defer sqliteDatabase.Close()
 
 	row, err := sqliteDatabase.Query("SELECT * FROM User where id = ? ", id)
@@ -83,7 +87,7 @@ func GetUser(c *gin.Context) {
 
 	for row.Next() {
 		user := new(models.User)
-		err := row.Scan(&user.Id, &user.Email, &user.Username, &user.IsActive)
+		err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.IsActive)
 		if err != nil {
 			log.Fatal(err)
 			c.JSON(500, gin.H{"error": err.Error()})

@@ -9,6 +9,8 @@ import (
 
 func main() {
 	// const db = database.InitializeSqlLite()
-	database.GetDatabase()
+	database.InitDatabase()
+	// Todo: Remove this is for testing purposes
+	// database.InitDatabase()
 	router.InitRouter()
 }
