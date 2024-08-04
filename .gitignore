@@ -25,3 +25,5 @@ sqlite-database.db
 
 # Docker air
 /server/tmp/
+
+.idea

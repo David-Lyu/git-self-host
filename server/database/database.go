@@ -1,41 +1,45 @@
 package database
 
 import (
-	"database/sql"
 	"log"
 	"os"
-
+	
+	sqliteDriver "app/database/sqlite"
+	"app/models"
+	
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func InitializeSqlLite() {
-	os.Remove("./database/sqlite-database.db")
-	log.Println("Creating sqlite-database.db...")
-	file, err := os.Create("./database/sqlite-database.db") // Create SQLite file
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	file.Close()
-	log.Println("sqlite-database.db created")
+type DBType string
 
-	sqliteDatabase, _ := sql.Open("sqlite3", "./database/sqlite-database.db")
-	defer sqliteDatabase.Close()
-	createTable(sqliteDatabase)
+type DB interface {
+	models.UserDB
+	models.RepoDB
 }
 
-func createTable(db *sql.DB) {
-	createUserTableSQL := `CREATE TABLE User (
-		"id" TEXT UNIQUE NOT NULL PRIMARY KEY,		
-		"email" TEXT,
-		"username" TEXT,
-		"isActive" BOOLEAN		
-	  );` // SQL Statement for Create Table
+const (
+	SQLITE     DBType = "SQLITE"
+	MYSQL      DBType = "MYSQL"
+	POSTGRESQL DBType = "POSTGRESQL"
+	MONGODB    DBType = "MONGODB"
+)
 
-	log.Println("Create user table...")
-	statement, err := db.Prepare(createUserTableSQL) // Prepare SQL Statement
-	if err != nil {
-		log.Fatal(err.Error())
+func NewDB() DB {
+	log.Println("Runs")
+	
+	switch os.Getenv("DB_TYPE") {
+	case string(MONGODB):
+		fallthrough
+	case string(MYSQL):
+		fallthrough
+	case string(POSTGRESQL):
+		log.Print("We do not support this yet...\n Using sqlite")
+		fallthrough
+	case string(SQLITE):
+		fallthrough
+	default:
+		db := sqliteDriver.NewSqliteDB()
+		db.InitDb()
+		return db
 	}
-	statement.Exec() // Execute SQL Statements
-	log.Println("user table created")
 }
