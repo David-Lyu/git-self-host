@@ -38,6 +38,8 @@ func NewDB() DB {
 	case string(SQLITE):
 		fallthrough
 	default:
-		return sqliteDriver.NewSqliteDB()
+		db := sqliteDriver.NewSqliteDB()
+		db.InitDb()
+		return db
 	}
 }
