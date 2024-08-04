@@ -10,6 +10,27 @@ import (
 	"github.com/google/uuid"
 )
 
+func (sd SqliteDB) createUserTable() {
+	createUserTableSQL := `CREATE TABLE User (
+		"id" TEXT UNIQUE NOT NULL PRIMARY KEY,
+		"email" TEXT,
+		"username" TEXT,
+		"password" TEXT,
+		"isActive" BOOLEAN
+	  );`
+	
+	log.Println("Create user table...")
+	statement, err := sd.db.Prepare(createUserTableSQL)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	
+	if _, err := statement.Exec(); err != nil {
+		log.Fatal(err.Error())
+	}
+	log.Println("user table created")
+}
+
 func (sd SqliteDB) InsertUser(c *gin.Context) {
 	id := uuid.New()
 	

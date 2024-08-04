@@ -12,8 +12,9 @@ import (
 
 type DBType string
 
-type Databaser interface {
+type DB interface {
 	models.UserDB
+	models.RepoDB
 }
 
 const (
@@ -23,7 +24,7 @@ const (
 	MONGODB    DBType = "MONGODB"
 )
 
-func InitDatabase() Databaser {
+func NewDB() DB {
 	log.Println("Runs")
 	
 	switch os.Getenv("DB_TYPE") {
@@ -38,6 +39,5 @@ func InitDatabase() Databaser {
 		fallthrough
 	default:
 		return sqliteDriver.NewSqliteDB()
-		
 	}
 }

@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	h := router.NewRouter(database.InitDatabase())
+	h := router.NewRouter(database.NewDB())
 	if err := h.Run(); err != nil {
 		log.Fatal(err)
 	}
