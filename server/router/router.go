@@ -1,27 +1,28 @@
 package router
 
 import (
-	"app/controllers"
-
+	"app/database"
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() {
+type Router struct {
+	routes *gin.Engine
+	db     database.Databaser
+}
 
-	r := gin.Default()
-
-	router := r.Group("/v1")
-	{
-		// users
-		userRouter := router.Group("/user")
-		{
-			userRouter.POST("/", controllers.InsertUser)
-			userRouter.GET("/", controllers.GetUsers)
-			userRouter.GET("/:id", controllers.GetUser)
-			userRouter.PATCH("/:id", controllers.UpdateUser)
-			userRouter.DELETE("/:id", controllers.DeleteUser)
-		}
+func NewRouter(db database.Databaser) Router {
+	r := Router{
+		routes: gin.Default(),
+		db:     db,
 	}
+	
+	v1 := r.routes.Group("/v1")
+	
+	r.addUserRoute(v1)
+	
+	return r
+}
 
-	r.Run()
+func (r *Router) Run() error {
+	return r.routes.Run()
 }
